@@ -102,7 +102,7 @@ _strptime(const char *buf, const char *fmt, struct tm *tm, int *GMTp,
 
 		if (c != '%') {
 			if (isspace_l((unsigned char)c, locale))
-				while (*buf != 0 && 
+				while (*buf != 0 &&
 				       isspace_l((unsigned char)*buf, locale))
 					buf++;
 			else if (c != *buf++)
@@ -710,12 +710,6 @@ char *
 strptime(const char * __restrict buf, const char * __restrict fmt,
     struct tm * __restrict tm)
 {
-#if HAVE__GET_CURRENT_LOCALE
-	return strptime_l(buf, fmt, tm, _get_current_locale());
-#elif HAVE__CREATE_LOCALE && !IS_NT61
-	return strptime_l(buf, fmt, tm, _create_locale(LC_TIME, "C"));
-#else
 	_locale_t locale;
 	return strptime_l(buf, fmt, tm, locale);
-#endif
 }
