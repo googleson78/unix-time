@@ -127,7 +127,7 @@ struct tm *gmtime_r(const time_t *_time_t, struct tm *_tm);
 struct tm *localtime_r(const time_t *_time_t, struct tm *_tm);
 
 #if HAVE__MKGMTIME
-#define timegm _mkgmtime
+extern time_t timegm (struct tm* tm);
 #define HAVE_TIMEGM 1
 #endif
 
