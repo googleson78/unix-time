@@ -79,7 +79,7 @@ const struct lc_time_T   _C_time_locale = {
 
     /* date_fmt */
     "%a %b %e %H:%M:%S %Z %Y",
-    
+
     /* alt_month
      * Standalone months forms for %OB
      */
@@ -127,3 +127,28 @@ int _patch_unsetenv(const char *name) {
     free(sname);
     return r;
 }
+
+#if !HAVE__MKGMTIME && !HAVE_TIMEGM
+static time_t timegm (struct tm *tm)
+{
+  static const unsigned ndays[2][12] ={
+    {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+    {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
+  time_t res = 0;
+  unsigned i;
+
+  for (i = 70; i < tm->tm_year; ++i)
+    res += isleap(i + 1900) ? 366 : 365;
+
+  for (i = 0; i < tm->tm_mon; ++i)
+    res += ndays[isleap(tm->tm_year + 1900)][i];
+  res += tm->tm_mday - 1;
+  res *= 24;
+  res += tm->tm_hour;
+  res *= 60;
+  res += tm->tm_min;
+  res *= 60;
+  res += tm->tm_sec;
+  return res;
+}
+#endif
