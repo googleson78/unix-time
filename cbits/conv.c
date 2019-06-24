@@ -18,9 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if defined(_WIN32)
 #include "win_patch.h"
-#endif // _WIN32
 
 #if THREAD_SAFE
 #if HAVE_XLOCALE_H
