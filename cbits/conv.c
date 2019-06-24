@@ -91,7 +91,6 @@ time_t c_parse_unix_time(char *fmt, char *src) {
     return mktime(&dst);
 }
 
-#if !defined(HAVE_TIMEGM)
 /* This part is for Solaris that doesn't have timegm.
  * The copyright notice of timegm and is_leap is as below:
  *
@@ -123,7 +122,6 @@ timegm (struct tm *tm)
   res += tm->tm_sec;
   return res;
 }
-#endif /* HAVE_TIMEGM */
 
 time_t c_parse_unix_time_gmt(char *fmt, char *src) {
     struct tm dst;
