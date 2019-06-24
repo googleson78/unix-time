@@ -698,7 +698,7 @@ strptime_l(const char * __restrict buf, const char * __restrict fmt,
 	gmt = 0;
 	ret = _strptime(buf, fmt, tm, &gmt, loc);
 	if (ret && gmt) {
-		time_t t = timegm(tm);
+		time_t t = timegm1(tm);
 
 		localtime_s(tm, &t);
 	}

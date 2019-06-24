@@ -137,7 +137,7 @@ time_t c_parse_unix_time_gmt(char *fmt, char *src) {
     strptime(src, fmt, &dst);
 #endif
     set_tz(local_tz);
-    return timegm(&dst);
+    return timegm1(&dst);
 }
 
 size_t c_format_unix_time(char *fmt, time_t src, char* dst, int siz) {

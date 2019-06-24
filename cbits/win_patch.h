@@ -129,6 +129,30 @@ struct tm *localtime_r(const time_t *_time_t, struct tm *_tm);
 #if HAVE__MKGMTIME
 #define timegm _mkgmtime
 #define HAVE_TIMEGM 1
+#elif !HAVE_TIMEGM
+static time_t timegm1 (struct tm *tm)
+{
+  static const unsigned ndays[2][12] ={
+    {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+    {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}};
+  time_t res = 0;
+  unsigned i;
+
+  for (i = 70; i < tm->tm_year; ++i)
+    res += isleap(i + 1900) ? 366 : 365;
+
+  for (i = 0; i < tm->tm_mon; ++i)
+    res += ndays[isleap(tm->tm_year + 1900)][i];
+  res += tm->tm_mday - 1;
+  res *= 24;
+  res += tm->tm_hour;
+  res *= 60;
+  res += tm->tm_min;
+  res *= 60;
+  res += tm->tm_sec;
+  return res;
+}
+#define HAVE_TIMEGM 1
 #endif
 
 #define fprintf_l(fp, loc, ...) fprintf(fp, ##__VA_ARGS__)
